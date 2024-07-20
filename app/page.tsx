@@ -1,9 +1,14 @@
 import SigninButton from "@/components/SigninButton";
+import { TestForm } from "@/components/TestForm";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main className="relative flex h-svh w-full flex-col items-center justify-center">
-      <SigninButton />
+    <main className="relative w-full">
+      <TestForm />
+      <hr />
+      <div className="my-16 flex flex-col items-center justify-center">
+        <SigninButton />
+      </div>
     </main>
   );
 }
