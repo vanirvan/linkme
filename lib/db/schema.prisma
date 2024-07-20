@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  id    BigInt  @id @default(autoincrement())
+  id    Int     @id @default(autoincrement())
   name  String?
   email String  @unique
   image String?
@@ -24,8 +24,8 @@ model User {
 }
 
 model Account {
-  id                BigInt @id @default(autoincrement())
-  userId            BigInt @map("user_id")
+  id                Int    @id @default(autoincrement())
+  userId            Int    @map("user_id")
   provider          String
   providerAccountId String @map("provider_account_id")
 
@@ -39,8 +39,8 @@ model Account {
 }
 
 model Link {
-  id     BigInt @id @default(autoincrement())
-  userId BigInt @map("user_id")
+  id     Int    @id @default(autoincrement())
+  userId Int    @map("user_id")
   title  String
   link   String
 
@@ -54,9 +54,9 @@ model Link {
 }
 
 model LinkOrder {
-  id     BigInt @id @default(autoincrement())
-  userId BigInt
-  linkId BigInt @unique
+  id     Int @id @default(autoincrement())
+  userId Int
+  linkId Int @unique
   order  Int
 
   user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
