@@ -1,0 +1,70 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    BigInt  @id @default(autoincrement())
+  name  String?
+  email String  @unique
+  image String?
+
+  accounts   Account[]
+  links      Link[]
+  linkOrders LinkOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("users")
+}
+
+model Account {
+  id                BigInt @id @default(autoincrement())
+  userId            BigInt @map("user_id")
+  provider          String
+  providerAccountId String @map("provider_account_id")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Link {
+  id     BigInt @id @default(autoincrement())
+  userId BigInt @map("user_id")
+  title  String
+  link   String
+
+  user       User        @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  linkOrders LinkOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("links")
+}
+
+model LinkOrder {
+  id     BigInt @id @default(autoincrement())
+  userId BigInt
+  linkId BigInt @unique
+  order  Int
+
+  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  link Link @relation(fields: [linkId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([userId, order])
+  @@map("link_orders")
+}
