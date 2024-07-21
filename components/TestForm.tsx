@@ -1,6 +1,7 @@
 "use client";
 
 import { postLink } from "@/lib/services/postLink";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 
 export function TestForm() {
@@ -11,10 +12,13 @@ export function TestForm() {
 
   const [form, setForm] = useState<FormState>({ url: "", title: "" });
 
+  const linkMutate = useMutation({
+    mutationFn: postLink,
+  });
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const pl = await postLink({ url: form.url, title: form.title });
-    console.log(pl);
+    linkMutate.mutate({ url: form.url, title: form.title });
   };
 
   return (

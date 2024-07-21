@@ -10,7 +10,6 @@ interface PostRequest {
 
 export async function POST(req: NextRequest) {
   const { title, url }: PostRequest = await req.json();
-  console.log({ title, url });
 
   const session = await getServerSession(authOptions);
 
@@ -68,7 +67,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Link created!",
         data: {
           id: storeLink.id,
           title: storeLink.title,
@@ -81,12 +79,13 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     console.error("ERROR POST LINK API");
     console.error(e);
-    throw new Error("ERROR POST LINK API");
+    return NextResponse.json(
+      {
+        error: "Something went wrong on the server, please try again later.",
+      },
+      { status: 500 },
+    );
   } finally {
     await prisma.$disconnect();
   }
-
-  // return NextResponse.json({
-  //   data: data ? data : "Hello World by default!",
-  // });
 }
