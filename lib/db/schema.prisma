@@ -44,8 +44,8 @@ model Link {
   title  String
   link   String
 
-  user       User        @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  linkOrders LinkOrder[]
+  user       User       @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  linkOrders LinkOrder?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
