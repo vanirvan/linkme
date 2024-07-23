@@ -3,6 +3,7 @@
 import { postLink } from "@/lib/services/postLink";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { queryClient } from "@/components/providers/QueryProvider";
 
 export function TestForm() {
   type FormState = {
@@ -14,6 +15,9 @@ export function TestForm() {
 
   const linkMutate = useMutation({
     mutationFn: postLink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["links"] });
+    },
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -1,3 +1,4 @@
+import { LinkList } from "@/components/LinkList";
 import SigninButton from "@/components/SigninButton";
 import { TestForm } from "@/components/TestForm";
 
@@ -6,6 +7,7 @@ export default async function Home() {
     <main className="relative w-full">
       <TestForm />
       <hr />
+      <LinkList />
       <div className="my-16 flex flex-col items-center justify-center">
         <SigninButton />
       </div>

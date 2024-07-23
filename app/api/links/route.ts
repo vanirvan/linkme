@@ -3,6 +3,58 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { prisma } from "@/lib/db/prisma";
 
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+
+  // check if user authenticated
+  if (!session) {
+    return NextResponse.json(
+      {
+        error: "Signin required",
+      },
+      { status: 400 },
+    );
+  }
+
+  const getLinks = await prisma.user.findFirst({
+    where: {
+      email: session.user?.email!,
+    },
+    select: {
+      links: {
+        select: {
+          id: true,
+          title: true,
+          link: true,
+          linkOrders: {
+            select: {
+              order: true,
+            },
+          },
+          createdAt: true,
+        },
+      },
+    },
+  });
+
+  // sort links
+  const sortedLinks = getLinks?.links.sort(
+    (a, b) => a.linkOrders?.order! - b.linkOrders?.order!,
+  );
+
+  return NextResponse.json({
+    data: sortedLinks!.map((sl) => {
+      return {
+        id: sl.id,
+        title: sl.title,
+        link: sl.link,
+        order: sl.linkOrders?.order,
+        createdAt: sl.createdAt,
+      };
+    }),
+  });
+}
+
 interface PostRequest {
   title: string;
   url: string;
