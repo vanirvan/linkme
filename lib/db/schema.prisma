@@ -13,9 +13,9 @@ model User {
   email String  @unique
   image String?
 
-  accounts   Account[]
-  links      Link[]
-  linkOrders LinkOrder[]
+  accounts   Account[]   @relation("UserAccount")
+  links      Link[]      @relation("UserLink")
+  linkOrders LinkOrder[] @relation("UserLinkOrder")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -32,7 +32,7 @@ model Account {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user User @relation("UserAccount", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -44,8 +44,8 @@ model Link {
   title  String
   link   String
 
-  user       User       @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  linkOrders LinkOrder?
+  user       User       @relation("UserLink", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  linkOrders LinkOrder? @relation("LinkOrder")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -59,8 +59,8 @@ model LinkOrder {
   linkId Int @unique
   order  Int
 
-  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  link Link @relation(fields: [linkId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user User @relation("UserLinkOrder", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  link Link @relation("LinkOrder", fields: [linkId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
