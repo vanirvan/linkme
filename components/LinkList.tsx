@@ -67,6 +67,7 @@ export function LinkList() {
         {status == "success" &&
           linkList.map((d) => (
             <div key={d.id} className="space-y-2 bg-blue-700">
+              <p>ID = {d.id}</p>
               <p>{d.title}</p>
               <p>{d.link}</p>
               <button
