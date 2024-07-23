@@ -7,6 +7,7 @@ import { ReactSortable } from "react-sortablejs";
 import { queryClient } from "@/components/providers/QueryProvider";
 import { getLink } from "@/lib/services/getLink";
 import { changeOrder } from "@/lib/services/changeOrder";
+import { deleteLink } from "@/lib/services/deleteLink";
 
 export function LinkList() {
   const [linkList, setLinkList] = useState<
@@ -36,7 +37,13 @@ export function LinkList() {
   const saveOrderMutation = useMutation({
     mutationFn: changeOrder,
     onSuccess: () => {
-      console.log("order changed");
+      queryClient.invalidateQueries({ queryKey: ["links"] });
+    },
+  });
+
+  const onDeleteLink = useMutation({
+    mutationFn: deleteLink,
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["links"] });
     },
   });
@@ -62,6 +69,12 @@ export function LinkList() {
             <div key={d.id} className="space-y-2 bg-blue-700">
               <p>{d.title}</p>
               <p>{d.link}</p>
+              <button
+                onClick={() => onDeleteLink.mutate(d.id)}
+                className="bg-red-500 px-4 py-2"
+              >
+                Delete
+              </button>
             </div>
           ))}
       </ReactSortable>
