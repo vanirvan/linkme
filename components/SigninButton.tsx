@@ -31,7 +31,7 @@ export function SigninButton() {
               src={session?.user?.image!}
               alt={shortName(session?.user?.name!)}
             />
-            <AvatarFallback>{session?.user?.name}</AvatarFallback>
+            <AvatarFallback>{shortName(session?.user?.name!)}</AvatarFallback>
           </Avatar>
         </div>
       </DropdownMenuTrigger>

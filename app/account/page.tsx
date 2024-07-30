@@ -2,13 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 
+import { AccountInfoPage } from "@/app/account/AccountInfoPage";
 import { ClaimAccontPage } from "@/app/account/ClaimAccountPage";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useIsClient } from "@/lib/utils/isClient";
 import { getUserPage } from "@/lib/services/getUserPage";
-import { shortName } from "@/lib/utils/shortName";
 import { Button } from "@/components/ui/button";
 import { ExternalLinkIcon } from "lucide-react";
 
@@ -23,7 +22,7 @@ export default function AccountPage() {
 
   return (
     <div className="relative w-full">
-      <div className="mx-auto mt-20 grid w-full max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-4 lg:grid-cols-5">
+      <div className="mx-auto mb-8 mt-20 grid w-full max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-4 lg:grid-cols-5">
         {isClient && !isLoading ? (
           <>
             <div className="col-span-1 flex flex-col gap-4">
@@ -88,18 +87,11 @@ export default function AccountPage() {
             </div>
 
             <div className="col-span-1 flex w-full flex-col gap-4 rounded bg-white p-4 shadow-md">
-              <div className="flex w-full flex-col items-center justify-center gap-4">
-                <Avatar className="h-32 w-32 border shadow">
-                  <AvatarImage
-                    src={userPageData?.data.image!}
-                    alt={userPageData?.data?.username!}
-                  />
-                  <AvatarFallback>
-                    {shortName(userPageData?.data.name!)}
-                  </AvatarFallback>
-                </Avatar>
-                <p>{userPageData?.data.name}</p>
-              </div>
+              <AccountInfoPage
+                name={userPageData?.data.name!}
+                username={userPageData?.data.username!}
+                image={userPageData?.data.image!}
+              />
             </div>
           </>
         ) : (
