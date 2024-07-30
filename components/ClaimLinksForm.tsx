@@ -18,7 +18,7 @@ export function ClaimLinksForm() {
       router.push("/account?claim=" + linkClaim);
     } else {
       window.localStorage.setItem("username", linkClaim);
-      signIn("google");
+      signIn("google", { callbackUrl: "/account" });
     }
   };
 

@@ -16,6 +16,7 @@ model User {
   accounts   Account[]   @relation("UserAccount")
   links      Link[]      @relation("UserLink")
   linkOrders LinkOrder[] @relation("UserLinkOrder")
+  page       Page?       @relation("UserPage")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -36,6 +37,19 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
+}
+
+model Page {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @unique
+  username String @unique
+
+  user User   @relation("UserPage", fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("pages")
 }
 
 model Link {

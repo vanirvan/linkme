@@ -9,8 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { shortName } from "@/lib/utils/shortName";
@@ -20,7 +18,7 @@ export function SigninButton() {
   const { data: session } = useSession();
 
   const onSignin = () => {
-    signIn("google");
+    signIn("google", { callbackUrl: "/account" });
   };
 
   return session ? (
@@ -45,7 +43,7 @@ export function SigninButton() {
           </DropdownMenuItem>
         </Link>
         <DropdownMenuItem
-          onClick={() => signOut()}
+          onClick={() => signOut({ callbackUrl: "/" })}
           className="cursor-pointer space-x-4"
         >
           <LogOutIcon className="h-4 w-4" />
@@ -58,7 +56,7 @@ export function SigninButton() {
       variant={"link"}
       size={"sm"}
       onClick={onSignin}
-      className="bg-primary-500 hover:bg-primary-300 group relative outline-none transition-colors duration-200 hover:no-underline"
+      className="group relative bg-primary-500 outline-none transition-colors duration-200 hover:bg-primary-300 hover:no-underline"
     >
       <span>Signin</span>
     </Button>
