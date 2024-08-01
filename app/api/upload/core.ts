@@ -1,8 +1,9 @@
-import { authOptions } from "@/lib/auth/options";
-import { prisma } from "@/lib/db/prisma";
 import { getServerSession } from "next-auth";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
+import { UploadThingError, UTApi } from "uploadthing/server";
+
+import { authOptions } from "@/lib/auth/options";
+import { prisma } from "@/lib/db/prisma";
 
 const f = createUploadthing();
 

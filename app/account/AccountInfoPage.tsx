@@ -1,13 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { PencilIcon, LoaderCircleIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { queryClient } from "@/components/providers/QueryProvider";
 import { shortName } from "@/lib/utils/shortName";
-import { useEffect, useState } from "react";
 import { useUploadThing as useUpload } from "@/lib/utils/uploadthing";
 import { useUserInfoStore } from "@/lib/store/useUserInfoStore";
-import { queryClient } from "@/components/providers/QueryProvider";
+import { deleteProfileImage } from "@/lib/services/deleteProfilePhoto";
 
 export function AccountInfoPage() {
   const [userName, userImage, userUsername] = useUserInfoStore((state) => [
@@ -19,8 +20,9 @@ export function AccountInfoPage() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const { startUpload, isUploading } = useUpload("profileImageUpload", {
-    onClientUploadComplete: (res) => {
+    onClientUploadComplete: async (res) => {
       setUploadedFile(null);
+      await deleteProfileImage(userImage);
       queryClient.invalidateQueries({ queryKey: ["userPageInfo"] });
     },
     onUploadError: () => {},
