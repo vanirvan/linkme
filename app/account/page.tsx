@@ -28,50 +28,48 @@ export default function AccountPage() {
             <div className="col-span-1 flex flex-col gap-4">
               <div className="flex flex-col gap-4 rounded bg-white p-4 shadow-md">
                 <h1>Total Links</h1>
-                <h2 className="text-2xl font-bold">
-                  {userPageData?.data.total_link}
-                </h2>
+                <h2 className="text-2xl font-bold">0</h2>
               </div>
               <div className="flex flex-col gap-4 rounded bg-white p-4 shadow-md">
                 <h1>Total Visitors</h1>
-                <h2 className="text-2xl font-bold">
-                  {userPageData?.data.total_link}
-                </h2>
+                <h2 className="text-2xl font-bold">0</h2>
               </div>
-              <div className="flex flex-col gap-4 rounded bg-white p-4 shadow-md">
-                <h1>Your Page</h1>
-                <h2 className="break-words text-sm">
-                  {!userPageData?.data.username ? (
-                    "You don't have page"
-                  ) : (
+              {userPageData?.data.username ? (
+                <div className="flex flex-col gap-4 rounded bg-white p-4 shadow-md">
+                  <h1>Your Page</h1>
+                  <h2 className="break-words text-sm">
+                    {!userPageData?.data.username ? (
+                      "You don't have page"
+                    ) : (
+                      <a
+                        href={`${process.env.NEXT_PUBLIC_APP_URL}/${userPageData?.data.username}`}
+                        target="_blank"
+                        className="underline"
+                      >
+                        {process.env.NEXT_PUBLIC_APP_URL}/
+                        {userPageData?.data.username}
+                      </a>
+                    )}
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    <Button variant={"outline"} size={"sm"}>
+                      Copy
+                    </Button>
+                    <Button variant={"outline"} size={"sm"}>
+                      Share
+                    </Button>
                     <a
                       href={`${process.env.NEXT_PUBLIC_APP_URL}/${userPageData?.data.username}`}
                       target="_blank"
-                      className="underline"
                     >
-                      {process.env.NEXT_PUBLIC_APP_URL}/
-                      {userPageData?.data.username}
+                      <Button variant={"outline"} size={"icon"}>
+                        {" "}
+                        <ExternalLinkIcon size={16} />{" "}
+                      </Button>
                     </a>
-                  )}
-                </h2>
-                <div className="flex items-center gap-2">
-                  <Button variant={"outline"} size={"sm"}>
-                    Copy
-                  </Button>
-                  <Button variant={"outline"} size={"sm"}>
-                    Share
-                  </Button>
-                  <a
-                    href={`${process.env.NEXT_PUBLIC_APP_URL}/${userPageData?.data.username}`}
-                    target="_blank"
-                  >
-                    <Button variant={"outline"} size={"icon"}>
-                      {" "}
-                      <ExternalLinkIcon size={16} />{" "}
-                    </Button>
-                  </a>
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
 
             <div className="col-span-1 w-full rounded md:col-span-3">
@@ -87,11 +85,7 @@ export default function AccountPage() {
             </div>
 
             <div className="col-span-1 flex w-full flex-col gap-4 rounded bg-white p-4 shadow-md">
-              <AccountInfoPage
-                name={userPageData?.data.name!}
-                username={userPageData?.data.username!}
-                image={userPageData?.data.image!}
-              />
+              <AccountInfoPage />
             </div>
           </>
         ) : (

@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { UserIcon, LogOutIcon } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,26 +15,64 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { shortName } from "@/lib/utils/shortName";
-import Link from "next/link";
+import { useIsClient } from "@/lib/utils/isClient";
+import { getUserPage } from "@/lib/services/getUserPage";
+import { useUserInfoStore } from "@/lib/store/useUserInfoStore";
 
 export function SigninButton() {
-  const { data: session } = useSession();
+  const isClient = useIsClient();
+
+  const { data: session, status } = useSession();
+
+  const {
+    data: userPageData,
+    refetch,
+    isFetching,
+  } = useQuery({
+    queryKey: ["userPageInfo"],
+    queryFn: getUserPage,
+    staleTime: Infinity,
+    enabled: status === "authenticated" ? true : false,
+  });
+
+  const [userName, userImage, update] = useUserInfoStore((state) => [
+    state.name,
+    state.image,
+    state.update,
+  ]);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      refetch();
+    }
+  }, [status, refetch]);
+
+  useEffect(() => {
+    if (!isFetching && userPageData) {
+      update({
+        name: userPageData.data.name!,
+        image: userPageData.data.image!,
+        username: userPageData.data.username!,
+      });
+    }
+  }, [userPageData, update, isFetching]);
 
   const onSignin = () => {
     signIn("google", { callbackUrl: "/account" });
   };
 
-  return session ? (
+  return !isClient || session === undefined ? null : session !== null ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex cursor-pointer items-center gap-2">
           <p className="text-sm">{session?.user?.name}</p>
-          <Avatar className="h-8 w-8">
+          <Avatar className="h-8 w-8 border">
             <AvatarImage
-              src={session?.user?.image!}
-              alt={shortName(session?.user?.name!)}
+              src={userImage}
+              alt={shortName(userName)}
+              className="object-cover"
             />
-            <AvatarFallback>{shortName(session?.user?.name!)}</AvatarFallback>
+            <AvatarFallback>{shortName(userName)}</AvatarFallback>
           </Avatar>
         </div>
       </DropdownMenuTrigger>

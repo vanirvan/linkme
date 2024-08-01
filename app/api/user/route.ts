@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+
 import { authOptions } from "@/lib/auth/options";
 import { prisma } from "@/lib/db/prisma";
 
@@ -16,7 +17,8 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const getUserPage = await prisma.user.findFirst({
+  // TODO: after making page theme feature, add it to here as well
+  const getUserInfo = await prisma.user.findFirst({
     where: {
       email: session.user?.email!,
     },
@@ -28,55 +30,17 @@ export async function GET(req: NextRequest) {
           username: true,
         },
       },
-      links: {
-        select: {
-          id: true,
-          title: true,
-          link: true,
-          linkOrders: {
-            select: {
-              order: true,
-            },
-          },
-          createdAt: true,
-        },
-        orderBy: {
-          id: "desc",
-        },
-      },
-      _count: {
-        select: {
-          links: true,
-        },
-      },
     },
   });
 
-  if (!getUserPage?.page?.username) {
-    return NextResponse.json(
-      {
-        data: {
-          name: getUserPage?.name,
-          username: null,
-          image: getUserPage?.image,
-          links: getUserPage?.links,
-          total_link: getUserPage?._count.links,
-        },
+  return NextResponse.json(
+    {
+      data: {
+        name: getUserInfo?.name,
+        image: getUserInfo?.image,
+        username: getUserInfo?.page?.username ?? null,
       },
-      { status: 200 },
-    );
-  } else {
-    return NextResponse.json(
-      {
-        data: {
-          name: getUserPage.name,
-          username: getUserPage?.page?.username,
-          image: getUserPage?.image,
-          links: getUserPage?.links,
-          total_link: getUserPage?._count.links,
-        },
-      },
-      { status: 200 },
-    );
-  }
+    },
+    { status: 200 },
+  );
 }
