@@ -14,8 +14,9 @@ export function ClaimAccontPage() {
   const claimLink = searchParams.get("claim");
 
   const [linkForm, setLinkForm] = useState<string>("");
+  const [linkError, setLinkError] = useState<string[]>([]);
 
-  const { mutate, data, isPending, isSuccess } = useMutation({
+  const { mutate, isPending, data } = useMutation({
     mutationFn: claimLinkFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userPage"] });
@@ -32,6 +33,19 @@ export function ClaimAccontPage() {
       setLinkForm(claimLink);
     }
   }, [claimLink]);
+
+  useEffect(() => {
+    const localClaimLink = localStorage.getItem("username");
+    if (localClaimLink) setLinkForm(localClaimLink);
+  }, []);
+
+  useEffect(() => {
+    if (data?.error) {
+      console.log("error njir");
+      setLinkError(data?.error?.link);
+    }
+  }, [data]);
+
   return (
     <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
       <h1 className="text-3xl font-semibold leading-none tracking-tight">
@@ -51,6 +65,15 @@ export function ClaimAccontPage() {
           disabled={isPending}
           className="max-w-96 bg-transparent text-[#333333] placeholder:text-[#8B8B8B] focus:outline-none"
         />
+      </div>
+      <div className="flex flex-col">
+        {linkError.map((le, key) => {
+          return (
+            <p key={key} className="text-xs italic text-red-500">
+              {le}
+            </p>
+          );
+        })}
       </div>
       <Button
         type="submit"
