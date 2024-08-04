@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { AccountInfoPage } from "@/app/account/AccountInfoPage";
 import { ClaimAccontPage } from "@/app/account/ClaimAccountPage";
+import { LinkLists } from "@/app/account/LinkLists";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useIsClient } from "@/lib/utils/isClient";
@@ -73,18 +74,16 @@ export default function AccountPage() {
             </div>
 
             <div className="col-span-1 w-full rounded md:col-span-3">
-              {!userPageData?.data.username ? (
-                <div className="flex flex-col gap-4 rounded bg-white p-4 shadow-md">
+              <div className="flex flex-col gap-4 rounded bg-white p-4 shadow-md">
+                {!userPageData?.data.username ? (
                   <ClaimAccontPage />
-                </div>
-              ) : (
-                <div className="flex flex-col gap-4 rounded bg-white p-4 shadow-md">
-                  <span>Data available</span>
-                </div>
-              )}
+                ) : (
+                  <LinkLists />
+                )}
+              </div>
             </div>
 
-            <div className="col-span-1 flex w-full flex-col gap-4 rounded bg-white p-4 shadow-md">
+            <div className="col-span-1 flex h-min w-full flex-col gap-4 rounded bg-white p-4 shadow-md">
               <AccountInfoPage />
             </div>
           </>

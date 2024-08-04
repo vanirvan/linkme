@@ -41,8 +41,11 @@ export function ClaimAccontPage() {
 
   useEffect(() => {
     if (data?.error) {
-      console.log("error njir");
       setLinkError(data?.error?.link);
+    }
+
+    if (data?.data) {
+      localStorage.removeItem("username");
     }
   }, [data]);
 

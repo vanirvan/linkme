@@ -9,5 +9,5 @@ export function updateLink(props: ServiceProps) {
     method: "PATCH",
     body: JSON.stringify(props),
     next: { revalidate: false },
-  });
+  }).then((res) => res.json());
 }
