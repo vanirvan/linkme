@@ -1,16 +1,16 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { ExternalLinkIcon } from "lucide-react";
 
-import { AccountInfoPage } from "@/app/account/AccountInfoPage";
-import { ClaimAccontPage } from "@/app/account/ClaimAccountPage";
-import { LinkLists } from "@/app/account/LinkLists";
+import { AccountInfoPage } from "@/components/page-components/account/AccountInfoPage";
+import { ClaimAccontPage } from "@/components/page-components/account/ClaimAccountPage";
+import { LinkLists } from "@/components/page-components/account/LinkLists";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useIsClient } from "@/lib/utils/isClient";
 import { getUserPage } from "@/lib/services/getUserPage";
-import { Button } from "@/components/ui/button";
-import { ExternalLinkIcon } from "lucide-react";
 
 export default function AccountPage() {
   const isClient = useIsClient();
