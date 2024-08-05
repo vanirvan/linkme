@@ -34,7 +34,7 @@ export function DeleteConfirmation() {
   };
 
   return (
-    <div className={!isDesktop ? "p-4" : ""}>
+    <div className={`space-y-8 ${!isDesktop ? "p-4" : ""}`}>
       <h1 className="text-xl">
         You will deleting <span className="font-bold">{deleteData?.title}</span>
         , are you sure?

@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { PlusIcon } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { PlusIcon, ArrowUpDownIcon } from "lucide-react";
+import { ReactSortable } from "react-sortablejs";
 
 import { Button } from "@/components/ui/button";
 import { getLink } from "@/lib/services/getLink";
 import { useLinkDialogStore } from "@/lib/store/useLinkDialogStore";
 import { LinkDialog } from "@/components/page-components/account/LinkDialog";
 import { LinkCard } from "@/components/page-components/account/LinkCard";
+import { changeOrder } from "@/lib/services/changeOrder";
+import { queryClient } from "@/components/providers/QueryProvider";
 
 export function LinkLists() {
   const [links, setLinks] = useState<
@@ -40,6 +43,17 @@ export function LinkLists() {
     state.setOpenType,
   ]);
 
+  const { mutate: mutateOrder, isPending: saveOrderPending } = useMutation({
+    mutationFn: changeOrder,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["linkLists"] });
+    },
+  });
+
+  const saveOrder = () => {
+    mutateOrder(links);
+  };
+
   useEffect(() => {
     if (!isFetching) {
       setLinks(linkList?.data!);
@@ -48,8 +62,7 @@ export function LinkLists() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div></div>
+      <div className="flex items-center justify-end">
         <Button
           size={"sm"}
           className="bg-blue-500 text-sm hover:bg-blue-400"
@@ -62,12 +75,30 @@ export function LinkLists() {
           Add
         </Button>
       </div>
+      <div className="flex items-center justify-center">
+        <Button
+          size={"sm"}
+          onClick={saveOrder}
+          disabled={saveOrderPending}
+          className="flex items-center gap-4 bg-blue-500 text-sm hover:bg-blue-400"
+        >
+          <ArrowUpDownIcon size={16} color="white" />
+          Save Link Sequences
+        </Button>
+      </div>
 
-      <div className="flex flex-col gap-4">
+      <ReactSortable
+        list={links}
+        setList={setLinks}
+        animation={200}
+        delayOnTouchOnly={true}
+        delay={200}
+        className="flex flex-col gap-4"
+      >
         {links.map((l, key) => (
           <LinkCard key={key} props={l} />
         ))}
-      </div>
+      </ReactSortable>
 
       <LinkDialog />
     </>
