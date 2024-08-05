@@ -1,4 +1,4 @@
-import { ClaimLinksForm } from "@/components/ClaimLinksForm";
+import { ClaimLinksForm } from "@/components/page-components/home/ClaimLinkForm";
 
 export default async function Home() {
   return (
@@ -11,7 +11,7 @@ export default async function Home() {
           Simple All in One <br />
           <span className="relative">
             Link in Bio
-            <div className="from-primary-500 to-secondary-500 absolute bottom-0 left-0 h-1 w-full rounded-full bg-gradient-to-r" />
+            <div className="absolute bottom-0 left-0 h-1 w-full rounded-full bg-gradient-to-r from-primary-500 to-secondary-500" />
           </span>
         </h1>
         <h2 className="transition-colors duration-200 sm:text-lg">
