@@ -6,6 +6,7 @@ import {
   GripHorizontalIcon,
   PencilIcon,
   Trash2Icon,
+  CalendarIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLinkDialogStore } from "@/lib/store/useLinkDialogStore";
+import { linkCardFormatDate } from "@/lib/utils/time-format";
 
 interface ComponentProps {
   props: {
@@ -29,8 +31,6 @@ interface ComponentProps {
 }
 
 export function LinkCard({ props }: ComponentProps) {
-  const [isGrabbing, setIsGrabbing] = useState<boolean>(false);
-
   const [setDialogOpen, setDialogData, setDialogOpenType] = useLinkDialogStore(
     (state) => [state.setOpen, state.setData, state.setOpenType],
   );
@@ -48,19 +48,18 @@ export function LinkCard({ props }: ComponentProps) {
   };
 
   return (
-    <div
-      className={`flex items-center justify-between gap-12 rounded bg-background-500 p-4 ${isGrabbing ? "cursor-grabbing" : null}`}
-      onMouseDown={() => setIsGrabbing(true)}
-      onMouseUp={() => setIsGrabbing(false)}
-    >
+    <div className="flex items-center justify-between gap-12 rounded bg-background-500 p-4">
       <div className="flex items-center gap-4">
         <div className="relative aspect-square w-4">
-          <GripHorizontalIcon
-            size={16}
-            className={isGrabbing ? "cursor-grabbing" : "cursor-grab"}
-          />
+          <GripHorizontalIcon size={16} />
         </div>
         <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <CalendarIcon size={12} className="text-slate-500" />
+            <span className="text-xs text-slate-500">
+              {linkCardFormatDate(props.createdAt)}
+            </span>
+          </div>
           <h1 className="text-lg font-semibold">{props.title}</h1>
           <h2 className="break-all text-sm italic text-gray-500">
             {props.link}
