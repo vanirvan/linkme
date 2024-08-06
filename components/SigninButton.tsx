@@ -3,7 +3,12 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { UserIcon, LogOutIcon } from "lucide-react";
+import {
+  UserIcon,
+  LogOutIcon,
+  MenuIcon,
+  LayoutDashboardIcon,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
@@ -58,7 +63,7 @@ export function SigninButton() {
   }, [userPageData, update, isFetching]);
 
   const onSignin = () => {
-    signIn("google", { callbackUrl: "/account" });
+    signIn("google", { callbackUrl: "/dashboard" });
   };
 
   return !isClient || session === undefined ? null : session !== null ? (
@@ -74,9 +79,16 @@ export function SigninButton() {
             />
             <AvatarFallback>{shortName(userName)}</AvatarFallback>
           </Avatar>
+          <MenuIcon size={16} />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background-500">
+        <Link href={"/dashboard"}>
+          <DropdownMenuItem className="cursor-pointer space-x-4">
+            <LayoutDashboardIcon className="h-4 w-4" />
+            <span>Dashboard</span>
+          </DropdownMenuItem>
+        </Link>
         <Link href={"/account"}>
           <DropdownMenuItem className="cursor-pointer space-x-4">
             <UserIcon className="h-4 w-4" />

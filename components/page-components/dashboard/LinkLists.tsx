@@ -6,8 +6,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { PlusIcon, ArrowUpDownIcon, LoaderIcon } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 
-import { LinkDialog } from "@/components/page-components/account/LinkDialog";
-import { LinkCard } from "@/components/page-components/account/LinkCard";
+import { LinkDialog } from "@/components/page-components/dashboard/LinkDialog";
+import { LinkCard } from "@/components/page-components/dashboard/LinkCard";
 import { queryClient } from "@/components/providers/QueryProvider";
 import { Button } from "@/components/ui/button";
 
