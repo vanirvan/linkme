@@ -6,9 +6,12 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { username: string } },
 ) {
+  const requestIp = await req.headers.get("x-forwarded-for");
+
   const getUsername = await prisma.page.findUnique({
     where: { username: params.username },
     select: {
+      id: true,
       userId: true,
     },
   });
@@ -21,6 +24,24 @@ export async function GET(
       },
       { status: 404 },
     );
+  }
+
+  const findIpWithin24Hours = await prisma.visitor.findFirst({
+    where: {
+      ip: requestIp!,
+      createdAt: {
+        gte: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      },
+    },
+  });
+
+  if (!findIpWithin24Hours) {
+    await prisma.visitor.create({
+      data: {
+        ip: requestIp!,
+        pageId: getUsername.id,
+      },
+    });
   }
 
   const getUserData = await prisma.user.findUnique({

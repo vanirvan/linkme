@@ -41,10 +41,11 @@ model Account {
 
 model Page {
   id       Int    @id @default(autoincrement())
-  userId   Int    @unique
+  userId   Int    @unique @map("user_id")
   username String @unique
 
-  user User   @relation("UserPage", fields: [userId], references: [id])
+  user    User      @relation("UserPage", fields: [userId], references: [id])
+  Visitor Visitor[] @relation("PageVisitor")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -81,4 +82,17 @@ model LinkOrder {
 
   @@unique([userId, order])
   @@map("link_orders")
+}
+
+model Visitor {
+  id     Int    @id @default(autoincrement())
+  pageId Int    @map("page_id")
+  ip     String
+
+  page Page @relation("PageVisitor", fields: [pageId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("visitors")
 }
