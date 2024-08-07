@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  // TODO: after making page theme feature, add it to here as well
   const getUserInfo = await prisma.user.findFirst({
     where: {
       email: session.user?.email!,
@@ -70,22 +69,10 @@ export async function PATCH(req: NextRequest) {
       .max(16, { message: "Maximum username length is 16 characters" })
       .regex(/^[a-zA-Z0-9]+$/, {
         message: "Username can only contain alphanumeric",
-      })
-      .refine(
-        async (value) => {
-          const checkUsername = await prisma.page.findUnique({
-            where: {
-              username: value,
-            },
-          });
-
-          return checkUsername == null ? true : false;
-        },
-        { message: "Username already exist, try another one." },
-      ),
+      }),
   });
 
-  const validate = await validateSchema.safeParseAsync({ name, username });
+  const validate = validateSchema.safeParse({ name, username });
 
   if (!validate.success) {
     const validateError = validate.error.flatten().fieldErrors;
@@ -95,31 +82,55 @@ export async function PATCH(req: NextRequest) {
   try {
     const findUser = await prisma.user.findFirst({
       where: {
-        email: session.user?.email!,
+        email: session?.user?.email!,
       },
-      select: {
-        id: true,
-        image: true,
-      },
-    });
-
-    await prisma.user.update({
-      where: {
-        email: session.user?.email!,
-      },
-      data: {
-        name,
+      include: {
+        page: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
 
-    await prisma.page.update({
-      where: {
-        userId: findUser?.id,
-      },
-      data: {
-        username,
-      },
-    });
+    if (findUser?.name !== name) {
+      await prisma.user.update({
+        where: {
+          id: findUser?.id,
+        },
+        data: {
+          name,
+        },
+      });
+    }
+
+    if (findUser?.page?.username !== username) {
+      const checkUniqueUsername = await prisma.page.findUnique({
+        where: {
+          username,
+        },
+      });
+
+      if (checkUniqueUsername) {
+        return NextResponse.json(
+          {
+            error: {
+              username: ["Username already exist, try another one."],
+            },
+          },
+          { status: 400 },
+        );
+      }
+
+      await prisma.page.update({
+        where: {
+          username: findUser?.page?.username,
+        },
+        data: {
+          username,
+        },
+      });
+    }
 
     return NextResponse.json(
       {
@@ -138,6 +149,107 @@ export async function PATCH(req: NextRequest) {
   } finally {
     await prisma.$disconnect();
   }
+
+  // // validate
+  // const validateSchema = z.object({
+  //   name: z.string().min(4).max(64),
+  //   username: z
+  //     .string()
+  //     .min(6, { message: "Minimum username length is 6 characters" })
+  //     .max(16, { message: "Maximum username length is 16 characters" })
+  //     .regex(/^[a-zA-Z0-9]+$/, {
+  //       message: "Username can only contain alphanumeric",
+  //     }),
+  //   // .refine(
+  //   //   async (value) => {
+  //   //     const checkUsername = await prisma.page.findUnique({
+  //   //       where: {
+  //   //         username: value,
+  //   //       },
+  //   //     });
+
+  //   //     return checkUsername == null ? true : false;
+  //   //   },
+  //   //   { message: "Username already exist, try another one." },
+  //   // ),
+  // });
+
+  // const validate = await validateSchema.safeParseAsync({ name, username });
+
+  // if (!validate.success) {
+  //   const validateError = validate.error.flatten().fieldErrors;
+  //   return NextResponse.json({ error: validateError }, { status: 400 });
+  // }
+
+  // try {
+  //   const findUser = await prisma.user.findFirst({
+  //     where: {
+  //       email: session.user?.email!,
+  //     },
+  //     select: {
+  //       id: true,
+  //       image: true,
+  //       name: true,
+  //       page: {
+  //         select: {
+  //           username: true,
+  //         },
+  //       },
+  //     },
+  //   });
+
+  //   const checkUniqueUsername = await prisma.page.findUnique({
+  //     where: {
+  //       username,
+  //     },
+  //     select: {
+  //       username,
+  //     },
+  //   });
+
+  //   if(checkUniqueUsername){
+
+  //   }
+
+  //   if (findUser?.name !== name) {
+  //     await prisma.user.update({
+  //       where: {
+  //         email: session.user?.email!,
+  //       },
+  //       data: {
+  //         name,
+  //       },
+  //     });
+  //   }
+
+  //   if (findUser?.page?.username !== username) {
+  //     await prisma.page.update({
+  //       where: {
+  //         userId: findUser?.id,
+  //       },
+  //       data: {
+  //         username,
+  //       },
+  //     });
+  //   }
+
+  //   return NextResponse.json(
+  //     {
+  //       data: {
+  //         name,
+  //         image: findUser?.image,
+  //         username,
+  //       },
+  //     },
+  //     { status: 200 },
+  //   );
+  // } catch (e) {
+  //   console.error("ERROR HAPPENED AT [POST] /API/USER");
+  //   console.error(e);
+  //   return NextResponse.json({ error: e }, { status: 500 });
+  // } finally {
+  //   await prisma.$disconnect();
+  // }
 }
 
 export async function DELETE(req: NextRequest) {
