@@ -10,4 +10,4 @@ export function middleware(req: NextRequest) {
   }
 }
 
-export const config = { matcher: ["/account"] };
+export const config = { matcher: ["/account", "/dashboard"] };

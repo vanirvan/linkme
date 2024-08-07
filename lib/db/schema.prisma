@@ -44,7 +44,7 @@ model Page {
   userId   Int    @unique @map("user_id")
   username String @unique
 
-  user    User      @relation("UserPage", fields: [userId], references: [id])
+  user    User      @relation("UserPage", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   Visitor Visitor[] @relation("PageVisitor")
 
   createdAt DateTime @default(now())

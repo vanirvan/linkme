@@ -1,12 +1,15 @@
+import { AccountSettingForm } from "@/components/page-components/account/AccountSettingForm";
+
 export default function AccountPage() {
   return (
-    <>
-      <span>
-        Account Page, will be used to edit user&lsquo;s profile and page theme
-        settings
-      </span>
-      <span>Also user able to delete account</span>
-      <span>Soon</span>
-    </>
+    <main className="relative w-full">
+      <div className="mx-auto mt-20 flex w-full max-w-7xl flex-col gap-4 p-4">
+        {/* account settings */}
+        <div className="flex w-full flex-col gap-4 rounded bg-white p-4 shadow-md">
+          <h1 className="text-xl font-bold">Account Settings</h1>
+          <AccountSettingForm />
+        </div>
+      </div>
+    </main>
   );
 }
