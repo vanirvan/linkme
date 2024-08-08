@@ -45,23 +45,66 @@ export function AccountSettingForm() {
     username: "",
   });
 
+  const [inputError, setInputError] = useState<{
+    name: string[];
+    username: string[];
+  }>({
+    name: [],
+    username: [],
+  });
+
   const { data: userInfoData, isPending } = useQuery({
     queryKey: ["UserInfo"],
     queryFn: getUserInfo,
     staleTime: Infinity,
   });
 
-  const { mutate: mutateUserInfo, isPending: isMutatePending } = useMutation({
+  const {
+    data: mutateUserInfoData,
+    mutate: mutateUserInfo,
+    isPending: isMutatePending,
+  } = useMutation({
     mutationFn: updateUserInfo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["UserInfo"] });
     },
   });
 
+  useEffect(() => {
+    if (!isMutatePending && mutateUserInfoData?.error) {
+      setInputError((prev) => ({
+        ...prev,
+        name: mutateUserInfoData.error?.name
+          ? mutateUserInfoData.error?.name!
+          : [],
+        username: mutateUserInfoData.error?.username
+          ? mutateUserInfoData.error?.username!
+          : [],
+      }));
+    }
+  }, [isMutatePending, mutateUserInfoData]);
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     mutateUserInfo(input);
   };
+
+  const onCancel = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const onDelete = () => {
+    mutateDeleteUser();
+  };
+
+  useEffect(() => {
+    if (!isPending && userInfoData) {
+      setInput((prev) => ({
+        name: userInfoData.data.name,
+        username: userInfoData.data.username,
+      }));
+    }
+  }, [isPending, userInfoData]);
 
   // handle profile image change
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -96,23 +139,6 @@ export function AccountSettingForm() {
         signOut({ callbackUrl: "/" });
       },
     });
-
-  const onCancel = () => {
-    setDeleteDialogOpen(false);
-  };
-
-  const onDelete = () => {
-    mutateDeleteUser();
-  };
-
-  useEffect(() => {
-    if (!isPending && userInfoData) {
-      setInput((prev) => ({
-        name: userInfoData.data.name,
-        username: userInfoData.data.username,
-      }));
-    }
-  }, [isPending, userInfoData]);
 
   return isClient && userInfoData ? (
     <>
@@ -167,6 +193,13 @@ export function AccountSettingForm() {
             }
             className="w-full max-w-sm"
           />
+          {inputError.name.length > 0
+            ? inputError.name.map((inputErrorName, key) => (
+                <p key={key} className="text-xs text-red-500">
+                  {inputErrorName}
+                </p>
+              ))
+            : null}
         </div>
         <div className="flex flex-col gap-2">
           <label
@@ -186,6 +219,13 @@ export function AccountSettingForm() {
             }
             className="w-full max-w-sm"
           />
+          {inputError.username.length > 0
+            ? inputError.username.map((inputErrorUsername, key) => (
+                <p key={key} className="text-xs text-red-500">
+                  {inputErrorUsername}
+                </p>
+              ))
+            : null}
         </div>
 
         <Button

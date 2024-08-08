@@ -1,5 +1,6 @@
-import { SigninButton } from "@/components/SigninButton";
 import Link from "next/link";
+
+import { NavbarDropdownMenu } from "@/components/NavbarDropdownMenu";
 
 export function Navbar() {
   return (
@@ -15,7 +16,7 @@ export function Navbar() {
           Linkme
         </Link>
         <div className="flex items-center gap-2">
-          <SigninButton />
+          <NavbarDropdownMenu />
         </div>
       </div>
     </section>

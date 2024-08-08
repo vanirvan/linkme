@@ -3,7 +3,21 @@ interface ServiceProps {
   username: string;
 }
 
-export async function updateUserInfo(props: ServiceProps) {
+interface ServiceReturn {
+  data?: {
+    name: string;
+    image: string;
+    username: string;
+  };
+  error?: {
+    name: string[];
+    username: string[];
+  };
+}
+
+export async function updateUserInfo(
+  props: ServiceProps,
+): Promise<ServiceReturn> {
   return await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user`, {
     method: "PATCH",
     body: JSON.stringify(props),
