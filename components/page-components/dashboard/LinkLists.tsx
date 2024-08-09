@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { PlusIcon, ArrowUpDownIcon, LoaderIcon } from "lucide-react";
+import { PlusIcon, ArrowUpDownIcon } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 
 import { LinkDialog } from "@/components/page-components/dashboard/LinkDialog";
 import { LinkCard } from "@/components/page-components/dashboard/LinkCard";
 import { queryClient } from "@/components/providers/QueryProvider";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { getLink } from "@/lib/services/getLink";
 import { changeOrder } from "@/lib/services/changeOrder";
@@ -63,7 +64,7 @@ export function LinkLists() {
   }, [isPending, linkList]);
 
   return (
-    <>
+    <div className="space-y-4">
       <div className="flex items-center justify-end">
         <Button
           size={"sm"}
@@ -93,10 +94,7 @@ export function LinkLists() {
       ) : null}
 
       {isPending ? (
-        <div className="relative flex h-48 w-full flex-col items-center justify-center">
-          <LoaderIcon size={32} className="animate-spin" />
-          <span>Getting all of your links</span>
-        </div>
+        <LoadingSkeleton />
       ) : links.length > 0 ? (
         <ReactSortable
           list={links}
@@ -124,6 +122,18 @@ export function LinkLists() {
       )}
 
       <LinkDialog />
-    </>
+    </div>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-32 w-full rounded" />
+      <Skeleton className="h-32 w-full rounded" />
+      <Skeleton className="h-32 w-full rounded" />
+      <Skeleton className="h-32 w-full rounded" />
+      <Skeleton className="h-32 w-full rounded" />
+    </div>
   );
 }

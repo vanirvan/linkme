@@ -2,31 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Loader2Icon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 
 import { queryClient } from "@/components/providers/QueryProvider";
 import { Button } from "@/components/ui/button";
 import { claimLink as claimLinkFn } from "@/lib/services/claimLink";
-import { Loader2Icon } from "lucide-react";
 
-export function ClaimAccontPage() {
+export function DashboardClaimLink() {
   const searchParams = useSearchParams();
   const claimLink = searchParams.get("claim");
 
-  const [linkForm, setLinkForm] = useState<string>("");
+  const [linkForm, setLinkForm] = useState("");
   const [linkError, setLinkError] = useState<string[]>([]);
-
-  const { mutate, isPending, data } = useMutation({
-    mutationFn: claimLinkFn,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userPage"] });
-    },
-  });
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    mutate(linkForm);
-  };
 
   useEffect(() => {
     if (claimLink) {
@@ -39,15 +27,32 @@ export function ClaimAccontPage() {
     if (localClaimLink) setLinkForm(localClaimLink);
   }, []);
 
+  const {
+    mutate: mutateClaimLink,
+    isPending: mutateClaimLinkPending,
+    data: mutateClaimLinkData,
+  } = useMutation({
+    mutationFn: claimLinkFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["UserInfo"] });
+    },
+  });
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLinkError([]);
+    mutateClaimLink(linkForm);
+  };
+
   useEffect(() => {
-    if (data?.error) {
-      setLinkError(data?.error?.link);
+    if (mutateClaimLinkData?.error) {
+      setLinkError(mutateClaimLinkData?.error?.link);
     }
 
-    if (data?.data) {
+    if (mutateClaimLinkData?.data) {
       localStorage.removeItem("username");
     }
-  }, [data]);
+  }, [mutateClaimLinkData]);
 
   return (
     <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
@@ -65,7 +70,7 @@ export function ClaimAccontPage() {
           placeholder="yourlink"
           value={linkForm}
           onChange={(e) => setLinkForm(e.target.value)}
-          disabled={isPending}
+          disabled={mutateClaimLinkPending}
           className="max-w-96 bg-transparent text-[#333333] placeholder:text-[#8B8B8B] focus:outline-none"
         />
       </div>
@@ -80,11 +85,13 @@ export function ClaimAccontPage() {
       </div>
       <Button
         type="submit"
-        disabled={isPending}
+        disabled={mutateClaimLinkPending}
         className="flex w-max items-center gap-2 rounded-full bg-primary-500 text-black hover:bg-primary-300"
       >
         Claim your link
-        {isPending ? <Loader2Icon size={16} className="animate-spin" /> : null}
+        {mutateClaimLinkPending ? (
+          <Loader2Icon size={16} className="animate-spin" />
+        ) : null}
       </Button>
     </form>
   );

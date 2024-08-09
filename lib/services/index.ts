@@ -4,6 +4,7 @@ export { updateLink } from "./updateLink";
 
 // get
 export { getUserInfo } from "./get/getUserInfo";
+export { getLinkList } from "./get/getLinkList";
 
 // post
 
