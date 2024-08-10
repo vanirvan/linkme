@@ -28,12 +28,14 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-import { getUserInfo } from "@/lib/services/get/getUserInfo";
-import { updateUserInfo } from "@/lib/services/update/updateUserInfo";
-import { deleteProfileImage } from "@/lib/services/deleteProfilePhoto";
+import {
+  getUserInfo,
+  updateUserInfo,
+  deleteProfileImage,
+  deleteUser,
+} from "@/lib/services/";
 import { useUploadThing as useUpload } from "@/lib/utils/uploadthing";
 import { shortName } from "@/lib/utils/shortName";
-import { deleteUser } from "@/lib/services/delete/deleteUser";
 
 export function AccountSettingForm() {
   const isClient = useIsClient();

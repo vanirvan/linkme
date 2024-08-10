@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { queryClient } from "@/components/providers/QueryProvider";
 import { Button } from "@/components/ui/button";
-import { claimLink as claimLinkFn } from "@/lib/services/claimLink";
+import { claimLink as claimLinkFn } from "@/lib/services/";
 
 export function DashboardClaimLink() {
   const searchParams = useSearchParams();

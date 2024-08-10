@@ -12,8 +12,7 @@ import { queryClient } from "@/components/providers/QueryProvider";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { getLink } from "@/lib/services/getLink";
-import { changeOrder } from "@/lib/services/changeOrder";
+import { getLink, changeOrder } from "@/lib/services/";
 import { useLinkDialogStore } from "@/lib/store/useLinkDialogStore";
 
 export function LinkLists() {
@@ -48,9 +47,6 @@ export function LinkLists() {
 
   const { mutate: mutateOrder, isPending: saveOrderPending } = useMutation({
     mutationFn: changeOrder,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["linkLists"] });
-    },
   });
 
   const saveOrder = () => {

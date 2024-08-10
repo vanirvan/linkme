@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useIsClient } from "usehooks-ts";
 
-import { getLinkList } from "@/lib/services/get/getLinkList";
+import { getLinkList } from "@/lib/services/";
 import { LoadingSkeleton } from "./LoadingStats";
 
 export function TotalLinkStats() {

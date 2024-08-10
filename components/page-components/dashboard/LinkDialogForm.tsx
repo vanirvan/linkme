@@ -24,7 +24,7 @@ export function LinkDialogForm() {
   const { mutate, isPending } = useMutation({
     mutationFn: formType === "add" ? postLink : updateLink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["linkLists"] });
+      queryClient.invalidateQueries({ queryKey: ["LinkLists"] });
       setFormData(null);
       setDialogOpen(false);
     },

@@ -18,7 +18,7 @@ export function DeleteConfirmation() {
   const { mutate, isPending } = useMutation({
     mutationFn: deleteLink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["linkLists"] });
+      queryClient.invalidateQueries({ queryKey: ["LinkLists"] });
       setDeleteData(null);
       dialogOpen(false);
     },

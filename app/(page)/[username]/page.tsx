@@ -1,7 +1,7 @@
 import { AvatarImage } from "@radix-ui/react-avatar";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { viewUserPage } from "@/lib/services/viewUserPage";
+import { viewUserPage } from "@/lib/services/";
 import { shortName } from "@/lib/utils/shortName";
 
 export default async function ViewUserPage({
