@@ -36,7 +36,7 @@ export function LinkLists() {
       createdAt: string;
     }[];
   }>({
-    queryKey: ["linkLists"],
+    queryKey: ["LinkLists"],
     queryFn: getLink,
     staleTime: Infinity,
   });

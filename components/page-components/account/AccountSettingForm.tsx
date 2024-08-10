@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { LoaderCircleIcon, PencilIcon, SaveIcon, XIcon } from "lucide-react";
-import { useMediaQuery } from "usehooks-ts";
+import { useMediaQuery, useIsClient } from "usehooks-ts";
 import { signOut } from "next-auth/react";
 
 import { queryClient } from "@/components/providers/QueryProvider";
@@ -31,7 +31,6 @@ import {
 import { getUserInfo } from "@/lib/services/get/getUserInfo";
 import { updateUserInfo } from "@/lib/services/update/updateUserInfo";
 import { deleteProfileImage } from "@/lib/services/deleteProfilePhoto";
-import { useIsClient } from "@/lib/utils/isClient";
 import { useUploadThing as useUpload } from "@/lib/utils/uploadthing";
 import { shortName } from "@/lib/utils/shortName";
 import { deleteUser } from "@/lib/services/delete/deleteUser";

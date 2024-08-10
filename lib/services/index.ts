@@ -5,6 +5,7 @@ export { updateLink } from "./updateLink";
 // get
 export { getUserInfo } from "./get/getUserInfo";
 export { getLinkList } from "./get/getLinkList";
+export { getAnalytic } from "@/lib/services/get/getAnalytic";
 
 // post
 

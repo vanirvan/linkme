@@ -8,6 +8,7 @@ import {
   LogOutIcon,
   MenuIcon,
   UserIcon,
+  ChartNoAxesColumnIcon,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -72,6 +73,12 @@ export function NavbarDropdownMenu() {
           <DropdownMenuItem className="cursor-pointer space-x-4">
             <LayoutDashboardIcon className="h-4 w-4" />
             <span>Dashboard</span>
+          </DropdownMenuItem>
+        </Link>
+        <Link href={"/analytic"}>
+          <DropdownMenuItem className="cursor-pointer space-x-4">
+            <ChartNoAxesColumnIcon className="h-4 w-4" />
+            <span>Analytic</span>
           </DropdownMenuItem>
         </Link>
         <Link href={"/account"}>
