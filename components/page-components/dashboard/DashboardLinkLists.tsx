@@ -14,6 +14,7 @@ export function DashboardLinkLists() {
     data: { name: string; username: string | null; image: string };
   }>({
     queryKey: ["UserInfo"],
+    staleTime: Infinity,
   });
 
   return isClient && !userInfoPending ? (

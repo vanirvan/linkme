@@ -13,6 +13,7 @@ export function TotalVisitorStats() {
   const { data: totalVisitorData, isPending: totalVisitorPending } = useQuery({
     queryKey: ["Analytics"],
     queryFn: getAnalytic,
+    staleTime: Infinity,
   });
 
   return isClient ? (

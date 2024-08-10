@@ -14,6 +14,7 @@ export function PageInfoStats() {
     data: { name: string; username: string | null; image: string };
   }>({
     queryKey: ["UserInfo"],
+    staleTime: Infinity,
   });
 
   const [copiedText, copy] = useCopyToClipboard();
