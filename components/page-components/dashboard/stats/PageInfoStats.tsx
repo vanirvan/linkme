@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { LoadingSkeleton } from "./LoadingStats";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function PageInfoStats() {
   const isClient = useIsClient();
@@ -22,23 +23,27 @@ export function PageInfoStats() {
     copy(`${process.env.NEXT_PUBLIC_APP_URL}/${userInfoData?.data.username}`);
   };
 
-  return isClient && !userInfoPending ? (
+  return isClient ? (
     <div className="flex w-full flex-grow flex-col gap-4 rounded bg-white p-4 shadow-md md:flex-grow-0">
       <h1>Your Page</h1>
-      <h2 className="break-words text-sm">
-        {!userInfoData?.data.username ? (
-          "You don't have page"
-        ) : (
-          <a
-            href={`${process.env.NEXT_PUBLIC_APP_URL}/${userInfoData.data.username}`}
-            target="_blank"
-            className="underline"
-          >
-            {process.env.NEXT_PUBLIC_APP_URL}/{userInfoData.data.username}
-          </a>
-        )}
-      </h2>
-      {userInfoData?.data.username ? (
+      {!userInfoPending ? (
+        <h2 className="break-words text-sm">
+          {!userInfoData?.data.username ? (
+            "You don't have page"
+          ) : (
+            <a
+              href={`${process.env.NEXT_PUBLIC_APP_URL}/${userInfoData.data.username}`}
+              target="_blank"
+              className="underline"
+            >
+              {process.env.NEXT_PUBLIC_APP_URL}/{userInfoData.data.username}
+            </a>
+          )}
+        </h2>
+      ) : (
+        <Skeleton className="h-5 w-72" />
+      )}
+      {!userInfoPending && userInfoData?.data.username ? (
         <div className="flex items-center gap-2">
           <Button onClick={onCopy} variant={"outline"} size={"sm"}>
             Copy

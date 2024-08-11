@@ -54,7 +54,7 @@ export function NavbarDropdownMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex cursor-pointer items-center gap-2">
-          <p className="text-sm">{userInfoData?.data.name}</p>
+          <p className="hidden text-sm md:block">{userInfoData?.data.name}</p>
           <Avatar className="h-8 w-8 border">
             <AvatarImage
               src={userInfoData?.data.image}
