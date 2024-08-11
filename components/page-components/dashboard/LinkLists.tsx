@@ -106,13 +106,9 @@ export function LinkLists() {
         </ReactSortable>
       ) : (
         <div className="relative flex w-full flex-col items-center gap-4 py-8">
-          <Image
-            src={"/empty.svg"}
-            alt="empty lists image"
-            width={240}
-            height={240}
-            objectFit="contain"
-          />
+          <div className="relative h-60 w-60">
+            <Image src={"/empty.svg"} alt="empty lists image" fill priority />
+          </div>
           <span>You have no links</span>
         </div>
       )}
