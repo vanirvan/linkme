@@ -1,14 +1,17 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { useQuery } from "@tanstack/react-query";
+
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getAnalytic } from "@/lib/services/";
+import { createAnalyticData } from "@/lib/utils/createAnalyticData";
 
 const chartConfig = {
   visitor: {
@@ -33,13 +36,13 @@ export function AnalyticChart() {
     return formatter.format(new Date(date));
   };
 
-  return (
+  return !isPending ? (
     <ChartContainer
       config={chartConfig}
       className="max-h-96 min-h-[200px] w-full"
     >
       <BarChart
-        data={data?.data.visitors.map((d) => ({
+        data={createAnalyticData(data?.data.visitors!).map((d) => ({
           date: formatDate(d.date),
           visitor: d.visitor,
         }))}
@@ -56,5 +59,11 @@ export function AnalyticChart() {
         <Bar dataKey="visitor" fill="#00ff00" radius={4} />
       </BarChart>
     </ChartContainer>
+  ) : (
+    <LoadingSkeleton />
   );
+}
+
+function LoadingSkeleton() {
+  return <Skeleton className="h-96 w-full" />;
 }
