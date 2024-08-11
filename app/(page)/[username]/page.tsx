@@ -1,8 +1,24 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import { AvatarImage } from "@radix-ui/react-avatar";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { viewUserPage } from "@/lib/services/";
 import { shortName } from "@/lib/utils/shortName";
+
+type MetadataProps = {
+  params: { username: string };
+};
+
+export async function generateMetadata(
+  { params }: MetadataProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const data = await viewUserPage(params.username);
+
+  return {
+    title: data.data?.name,
+  };
+}
 
 export default async function ViewUserPage({
   params,

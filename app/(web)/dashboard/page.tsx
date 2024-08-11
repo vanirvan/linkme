@@ -1,5 +1,11 @@
+import { Metadata } from "next";
+
 import { DashboardLinkLists } from "@/components/page-components/dashboard/DashboardLinkLists";
 import { DashboardStats } from "@/components/page-components/dashboard/DashboardStats";
+
+export const metadata: Metadata = {
+  title: "Dashboard | Linkme",
+};
 
 export default function DashboardPage() {
   return (

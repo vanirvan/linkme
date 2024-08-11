@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 import { AnalyticChart } from "@/components/page-components/analytic/AnalyticChart";
 import { AnalyticTotalVisitor } from "@/components/page-components/analytic/AnalyticTotalVisitor";
 import {
@@ -7,6 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+export const metadata: Metadata = {
+  title: "Analytic | Linkme",
+};
 
 export default function AnalyticPage() {
   return (
