@@ -63,13 +63,30 @@ export async function PATCH(req: NextRequest) {
   // validate
   const validateSchema = z.object({
     name: z.string().min(4).max(64),
-    username: z
-      .string()
-      .min(6, { message: "Minimum username length is 6 characters" })
-      .max(16, { message: "Maximum username length is 16 characters" })
-      .regex(/^[a-zA-Z0-9]+$/, {
-        message: "Username can only contain alphanumeric",
-      }),
+    username: z.optional(
+      z.nullable(
+        z
+          .string()
+          .min(6, { message: "Minimum username length is 6 characters" })
+          .max(16, { message: "Maximum username length is 16 characters" })
+          .regex(/^[a-zA-Z0-9]+$/, {
+            message: "Username can only contain alphanumeric",
+          })
+          .refine((value) => {
+            const prohibitedUsername = [
+              "account",
+              "dashboard",
+              "analytic",
+              "accounts",
+              "dashboards",
+              "analytics",
+              "profile",
+              "profiles",
+            ];
+            return !prohibitedUsername.find((pv) => pv === value);
+          }),
+      ),
+    ),
   });
 
   const validate = validateSchema.safeParse({ name, username });
@@ -104,32 +121,58 @@ export async function PATCH(req: NextRequest) {
       });
     }
 
-    if (findUser?.page?.username !== username) {
-      const checkUniqueUsername = await prisma.page.findUnique({
-        where: {
-          username,
-        },
-      });
+    if (username) {
+      if (findUser?.page) {
+        if (findUser.page.username !== username) {
+          const checkUniqueUsername = await prisma.page.findUnique({
+            where: { username },
+            select: { username: true },
+          });
 
-      if (checkUniqueUsername) {
-        return NextResponse.json(
-          {
-            error: {
-              username: ["Username already exist, try another one."],
+          if (checkUniqueUsername) {
+            return NextResponse.json(
+              {
+                error: {
+                  username: ["Username already exist, try another one."],
+                },
+              },
+              { status: 400 },
+            );
+          } else {
+            await prisma.page.update({
+              where: {
+                username: findUser?.page?.username,
+              },
+              data: {
+                username,
+              },
+            });
+          }
+        }
+      } else {
+        const checkUniqueUsername = await prisma.page.findUnique({
+          where: { username },
+          select: { username: true },
+        });
+
+        if (checkUniqueUsername) {
+          return NextResponse.json(
+            {
+              error: {
+                username: ["Username already exist, try another one."],
+              },
             },
-          },
-          { status: 400 },
-        );
+            { status: 400 },
+          );
+        } else {
+          await prisma.page.create({
+            data: {
+              username,
+              userId: findUser?.id!,
+            },
+          });
+        }
       }
-
-      await prisma.page.update({
-        where: {
-          username: findUser?.page?.username,
-        },
-        data: {
-          username,
-        },
-      });
     }
 
     return NextResponse.json(

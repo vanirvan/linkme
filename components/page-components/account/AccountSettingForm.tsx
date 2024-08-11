@@ -87,7 +87,11 @@ export function AccountSettingForm() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutateUserInfo(input);
+    setInputError({ name: [], username: [] });
+    mutateUserInfo({
+      name: input.name,
+      username: input.username ? input.username : null,
+    });
   };
 
   const onCancel = () => {
@@ -188,6 +192,7 @@ export function AccountSettingForm() {
             type="text"
             name="name"
             placeholder="Name"
+            required
             value={input.name}
             onChange={(e) =>
               setInput((prev) => ({ ...prev, name: e.target.value }))
@@ -260,12 +265,16 @@ export function AccountSettingForm() {
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button className="bg-slate-500 hover:bg-slate-400">
+              <Button
+                onClick={onCancel}
+                className="bg-slate-500 hover:bg-slate-400"
+              >
                 Nevermind
               </Button>
               <Button
                 variant="destructive"
                 disabled={isPending}
+                onClick={onDelete}
                 className="space-x-4"
               >
                 Yes, Delete Account

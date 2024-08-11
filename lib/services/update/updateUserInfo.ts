@@ -1,6 +1,6 @@
 interface ServiceProps {
   name: string;
-  username: string;
+  username: string | null;
 }
 
 interface ServiceReturn {
