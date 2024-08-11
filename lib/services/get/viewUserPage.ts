@@ -16,7 +16,7 @@ export async function viewUserPage(username: string): Promise<ServiceReturn> {
   const f = await fetch(
     `${process.env.NEXT_PUBLIC_APP_URL}/api/visit/${username}`,
     {
-      next: { revalidate: false },
+      cache: "no-store",
     },
   ).then((res) => res.json());
 

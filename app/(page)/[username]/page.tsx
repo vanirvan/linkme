@@ -39,16 +39,18 @@ export default async function ViewUserPage({
         </div>
 
         <div className="mt-12 flex w-full flex-col gap-4">
-          {data.data?.links.map((l) => (
-            <a
-              href={l.link}
-              target="_blank"
-              key={l.id}
-              className="flex w-full cursor-pointer justify-center rounded-md bg-blue-500 px-4 py-2 transition-all duration-200 hover:scale-105"
-            >
-              <span>{l.title}</span>
-            </a>
-          ))}
+          {data.data?.links.map(
+            (l: { id: number; title: string; link: string }) => (
+              <a
+                href={l.link}
+                target="_blank"
+                key={l.id}
+                className="flex w-full cursor-pointer justify-center rounded-md bg-blue-500 px-4 py-2 transition-all duration-200 hover:scale-105"
+              >
+                <span>{l.title}</span>
+              </a>
+            ),
+          )}
         </div>
       </div>
     </main>
