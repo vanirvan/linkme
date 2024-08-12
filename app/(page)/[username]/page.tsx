@@ -26,6 +26,12 @@ export default async function ViewUserPage({
   params: { username: string };
 }) {
   const data = await viewUserPage(params.username);
+  // const data = await fetch(
+  //   `${process.env.NEXT_PUBLIC_APP_URL}/api/visit/${params.username}`,
+  //   {
+  //     cache: "no-store",
+  //   },
+  // ).then((res) => res.json());
 
   return (
     <main className="flex min-h-svh w-full flex-col items-center bg-gradient-to-br from-[#5ee7df] to-[#b490ca] py-32">
