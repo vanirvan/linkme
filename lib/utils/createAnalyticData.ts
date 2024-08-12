@@ -33,6 +33,5 @@ export function createAnalyticData(data: AnalyticData[]): AnalyticData[] {
     });
   }
 
-  console.log(emptyAnalyticData);
   return emptyAnalyticData;
 }

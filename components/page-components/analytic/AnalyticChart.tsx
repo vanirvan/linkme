@@ -12,6 +12,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAnalytic } from "@/lib/services/";
 import { createAnalyticData } from "@/lib/utils/createAnalyticData";
+import { useEffect } from "react";
 
 const chartConfig = {
   visitor: {
@@ -42,7 +43,9 @@ export function AnalyticChart() {
       className="max-h-96 min-h-[200px] w-full"
     >
       <BarChart
-        data={createAnalyticData(data?.data.visitors!).map((d) => ({
+        data={createAnalyticData(
+          data?.data.visitors ? data?.data.visitors : [],
+        ).map((d) => ({
           date: formatDate(d.date),
           visitor: d.visitor,
         }))}

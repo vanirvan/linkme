@@ -16,7 +16,7 @@ export function AnalyticTotalVisitor() {
         Total Visitors
       </h1>
       <h2 className="text-lg font-bold leading-none sm:text-3xl">
-        {data?.data.total_visitor}
+        {data?.data.total_visitor ? data?.data.total_visitor : 0}
       </h2>
     </div>
   );
