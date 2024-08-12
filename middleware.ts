@@ -1,11 +1,10 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export function middleware(req: NextRequest) {
-  const cookie = cookies();
-  const authSession = cookie.get("next-auth.session-token");
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  if (!authSession) {
+  if (!token) {
     return NextResponse.redirect(req.nextUrl.origin + "/");
   }
 }
