@@ -12,11 +12,11 @@ interface RouteParam {
 interface PATCHRequest {
   id: number;
   title: string;
-  link: string;
+  url: string;
 }
 
 export async function PATCH(req: NextRequest, { params }: RouteParam) {
-  const { id, title, link }: PATCHRequest = await req.json();
+  const { id, title, url }: PATCHRequest = await req.json();
   const session = await getServerSession(authOptions);
 
   // check if user authenticated
@@ -61,7 +61,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParam) {
       },
       data: {
         title,
-        link,
+        link: url,
       },
     });
 

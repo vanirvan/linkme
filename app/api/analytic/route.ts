@@ -23,10 +23,6 @@ export async function GET(req: NextRequest) {
   const findUserPageId = await prisma.user.findFirst({
     where: {
       email: session?.user?.email!,
-      createdAt: {
-        gte: dateFrom,
-        lte: today,
-      },
     },
     select: {
       page: {
@@ -37,9 +33,25 @@ export async function GET(req: NextRequest) {
     },
   });
 
+  if (!findUserPageId?.page) {
+    return NextResponse.json(
+      {
+        data: {
+          visitors: [],
+          total_visitor: 0,
+        },
+      },
+      { status: 200 },
+    );
+  }
+
   const visitorCount = await prisma.visitor.count({
     where: {
       pageId: findUserPageId?.page?.id,
+      createdAt: {
+        gte: dateFrom,
+        lte: today,
+      },
     },
   });
 

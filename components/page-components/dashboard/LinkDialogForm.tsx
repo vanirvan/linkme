@@ -8,6 +8,7 @@ import { useLinkDialogStore } from "@/lib/store/useLinkDialogStore";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
 
 export function LinkDialogForm() {
@@ -27,6 +28,9 @@ export function LinkDialogForm() {
       queryClient.invalidateQueries({ queryKey: ["LinkLists"] });
       setFormData(null);
       setDialogOpen(false);
+      formType === "add"
+        ? toast.success("Link has been created")
+        : toast.success("Link has been updated");
     },
   });
 

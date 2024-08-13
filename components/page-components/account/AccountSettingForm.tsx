@@ -36,6 +36,7 @@ import {
 } from "@/lib/services/";
 import { useUploadThing as useUpload } from "@/lib/utils/uploadthing";
 import { shortName } from "@/lib/utils/shortName";
+import { toast } from "sonner";
 
 export function AccountSettingForm() {
   const isClient = useIsClient();
@@ -68,6 +69,7 @@ export function AccountSettingForm() {
     mutationFn: updateUserInfo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["UserInfo"] });
+      toast.success("Your profile has been updated");
     },
   });
 
@@ -130,7 +132,12 @@ export function AccountSettingForm() {
 
   useEffect(() => {
     if (uploadedFile) {
-      startUpload([uploadedFile]);
+      toast.promise(startUpload([uploadedFile]), {
+        loading: "Try to upload your profile image",
+        success: () => {
+          return "Your profile image has been updated!";
+        },
+      });
     }
   }, [uploadedFile, startUpload]);
 
@@ -142,6 +149,7 @@ export function AccountSettingForm() {
       onSuccess: () => {
         setDeleteDialogOpen(false);
         signOut({ callbackUrl: "/" });
+        toast.success("Your account has been deleted! Sayonara!");
       },
     });
 

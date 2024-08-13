@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/providers/AuthProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { Navbar } from "@/components/Navbar";
 import { cn } from "@/lib/utils/cn";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
           <QueryProvider>
             <Navbar />
             {children}
+            <Toaster position="top-right" richColors closeButton />
           </QueryProvider>
         </AuthProvider>
       </body>

@@ -6,6 +6,7 @@ import { deleteLink } from "@/lib/services";
 import { useLinkDialogStore } from "@/lib/store/useLinkDialogStore";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircleIcon } from "lucide-react";
+import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
 
 export function DeleteConfirmation() {
@@ -21,6 +22,7 @@ export function DeleteConfirmation() {
       queryClient.invalidateQueries({ queryKey: ["LinkLists"] });
       setDeleteData(null);
       dialogOpen(false);
+      toast.success("Link has beed deleted");
     },
   });
 

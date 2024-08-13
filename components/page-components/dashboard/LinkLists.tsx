@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { getLink, changeOrder } from "@/lib/services/";
 import { useLinkDialogStore } from "@/lib/store/useLinkDialogStore";
+import { toast } from "sonner";
 
 export function LinkLists() {
   const [links, setLinks] = useState<
@@ -47,6 +48,9 @@ export function LinkLists() {
 
   const { mutate: mutateOrder, isPending: saveOrderPending } = useMutation({
     mutationFn: changeOrder,
+    onSuccess: () => {
+      toast.success("Link order has been changed");
+    },
   });
 
   const saveOrder = () => {

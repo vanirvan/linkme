@@ -15,10 +15,10 @@ export function ClaimLinksForm() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (session) {
-      router.push("/account?claim=" + linkClaim);
+      router.push("/dashboard?claim=" + linkClaim);
     } else {
       window.localStorage.setItem("username", linkClaim);
-      signIn("google", { callbackUrl: "/account" });
+      signIn("google", { callbackUrl: "/dashboard" });
     }
   };
 

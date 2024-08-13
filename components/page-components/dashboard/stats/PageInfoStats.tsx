@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { LoadingSkeleton } from "./LoadingStats";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 export function PageInfoStats() {
   const isClient = useIsClient();
@@ -21,6 +22,9 @@ export function PageInfoStats() {
   const [copiedText, copy] = useCopyToClipboard();
   const onCopy = () => {
     copy(`${process.env.NEXT_PUBLIC_APP_URL}/${userInfoData?.data.username}`);
+    toast("Your page link has been copied", {
+      description: copiedText,
+    });
   };
 
   return isClient ? (

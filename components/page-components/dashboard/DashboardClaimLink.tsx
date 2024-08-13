@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { queryClient } from "@/components/providers/QueryProvider";
 import { Button } from "@/components/ui/button";
@@ -33,8 +34,11 @@ export function DashboardClaimLink() {
     data: mutateClaimLinkData,
   } = useMutation({
     mutationFn: claimLinkFn,
-    onSuccess: () => {
+    onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ["UserInfo"] });
+      toast.success("Your page has been created", {
+        description: `Now you can visit ${process.env.NEXT_PUBLIC_APP_URL}/${variables}`,
+      });
     },
   });
 
