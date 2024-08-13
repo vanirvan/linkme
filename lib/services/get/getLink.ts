@@ -1,5 +1,5 @@
 export function getLink() {
-  return fetch("http://localhost:3000/api/links", {
+  return fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/links`, {
     next: { revalidate: false },
   }).then((res) => res.json());
 }

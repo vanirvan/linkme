@@ -5,7 +5,7 @@ interface ServiceProps {
 }
 
 export function updateLink(props: ServiceProps) {
-  return fetch(`http://localhost:3000/api/links/${props.id}`, {
+  return fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/links/${props.id}`, {
     method: "PATCH",
     body: JSON.stringify(props),
     next: { revalidate: false },

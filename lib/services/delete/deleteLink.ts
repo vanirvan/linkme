@@ -1,5 +1,5 @@
 export function deleteLink(id: number) {
-  return fetch(`http://localhost:3000/api/links/${id}`, {
+  return fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/links/${id}`, {
     method: "DELETE",
     next: { revalidate: false },
   }).then((res) => res.json());

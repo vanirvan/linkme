@@ -7,7 +7,7 @@ type ServiceProps = {
 };
 
 export function changeOrder(props: ServiceProps[]) {
-  return fetch("http://localhost:3000/api/links/order", {
+  return fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/links/order`, {
     method: "POST",
     body: JSON.stringify({ links: props }),
     next: { revalidate: false },
