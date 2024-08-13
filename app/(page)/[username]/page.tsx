@@ -4,6 +4,7 @@ import { AvatarImage } from "@radix-ui/react-avatar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { viewUserPage } from "@/lib/services/";
 import { shortName } from "@/lib/utils/shortName";
+import { VisitNotFoundPage } from "@/components/page-components/visit/NotFound";
 
 type MetadataProps = {
   params: { username: string };
@@ -16,7 +17,7 @@ export async function generateMetadata(
   const data = await viewUserPage(params.username);
 
   return {
-    title: data.data?.name,
+    title: data.data !== null ? data.data?.name : "Not Found",
   };
 }
 
@@ -27,7 +28,7 @@ export default async function ViewUserPage({
 }) {
   const data = await viewUserPage(params.username);
 
-  return (
+  return data.data !== null ? (
     <main className="flex min-h-svh w-full flex-col items-center bg-gradient-to-br from-[#5ee7df] to-[#b490ca] py-32">
       <div className="flex w-full max-w-sm flex-col items-center">
         <div className="flex flex-col items-center gap-4">
@@ -54,5 +55,7 @@ export default async function ViewUserPage({
         </div>
       </div>
     </main>
+  ) : (
+    <VisitNotFoundPage />
   );
 }
